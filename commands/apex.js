@@ -1,4 +1,4 @@
-const {apexAPIKey} = require('../config.json')
+// const {apexAPIKey} = require('../config.json')
 const { default: axios } = require("axios")
 
 module.exports = {
@@ -25,7 +25,7 @@ module.exports = {
 					timestamp: new Date(),
 				};
 				const getMap = async() => {
-					const mapRotation = await axios.get(`https://api.mozambiquehe.re/maprotation?auth=${apexAPIKey}&version=2`)
+					const mapRotation = await axios.get(`https://api.mozambiquehe.re/maprotation?auth=${process.env.APEX_API_KEY}&version=2`)
 					const data = mapRotation.data
 					if (args[1] === 'arena') {
 						mapRotationEmbed.title = "Arena Map Rotation"

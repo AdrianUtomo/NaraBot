@@ -1,6 +1,7 @@
 const { Client, Intents, DiscordAPIError, Collection } = require('discord.js');
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
-const {token, prefix} = require('./config.json')
+require('dotenv').config();
+// const {token, prefix} = require('./config.json')
 
 client.commands = new Collection()
 const fs = require('fs')
@@ -31,8 +32,8 @@ client.on('interactionCreate', async interaction => {
 });
 
 client.on('messageCreate', async message => {
-	if (!message.content.startsWith(prefix) || message.author.bot) return;
-	const args = message.content.slice(prefix.length).trim().split(/ +/);
+	if (!message.content.startsWith(process.env.PREFIX) || message.author.bot) return;
+	const args = message.content.slice(process.env.PREFIX.length).trim().split(/ +/);
 	const command = args.shift().toLowerCase()
 
 	if (!client.commands.has(command)) return;
@@ -98,4 +99,4 @@ client.on('messageCreate', async message => {
 	// }
 })
 
-client.login(token);
+client.login(process.env.TOKEN);
