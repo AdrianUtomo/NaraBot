@@ -1,5 +1,6 @@
 // const {apexAPIKey} = require('../config.json')
 const { default: axios } = require("axios")
+const { MessageEmbed } = require('discord.js'); 
 
 module.exports = {
     name : 'apex',
@@ -56,10 +57,37 @@ module.exports = {
 				const getCrafting = async() => {
 					const craftingRotation = await axios.get(`https://api.mozambiquehe.re/crafting?auth=${process.env.APEX_API_KEY}`)
 					const data = craftingRotation.data;
-					await message.channel.send(
-						data[0].bundleContent
-					)
+					const craftingEmbed = {
+						color : "#1ce7db",
+						title : "Current crafting rotation",
+						fields : []
+					}
+					for (let i = 0; i < data.length; i++) {
+						const bundle = {
+							name : `${data[i].bundle} -- ${data[i].bundleType}`,
+							value : `End Date : ${data[i].endDate}`
+						}
+						if (i !== 0) {
+							craftingEmbed.fields.push({
+								name: '\u200b',
+								value: '\u200b',
+								inline: false
+							})
+						}
+						craftingEmbed.fields.push(bundle);
 
+						craftingContent = data[i].bundleContent
+						for (let j = 0; j < craftingContent.length; j++) {
+							const content = {
+								name : `${craftingContent[j].itemType.name}`,
+								value : `${craftingContent[j].cost}`,
+								inline : true
+							}
+							craftingEmbed.fields.push(content)
+						}
+					}
+
+					await message.channel.send({embeds : [craftingEmbed]})
 				}
 				getCrafting()
 			}
