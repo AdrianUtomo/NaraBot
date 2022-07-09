@@ -26,7 +26,7 @@ Notice that you will need some API Keys in order to get the bot working properly
 - APEX_API_KEY = [Click Me!](https://apexlegendsapi.com/)
 
 ### **Deployment**
-Push your changes to this repo. Make sure to test the bot first in your local machine to ensure everything is working correctly. Your push request will be reviewed first by the owner of this repository.
+Fork this repository then push your changes to your fork and create a new pull request. Make sure to test the bot first in your local machine to ensure everything is working correctly. Your push request will be reviewed first by the owner of this repository.
 
 ### **Helpful Links :**
 - [DiscordJS Documentation](https://discord.js.org/#/)<br>
