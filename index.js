@@ -1,35 +1,35 @@
-const { Client, Intents, DiscordAPIError, Collection } = require('discord.js');
-const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
 require('dotenv').config();
-// const {token, prefix} = require('./config.json')
-
-client.commands = new Collection()
+const { Client, Intents, Collection } = require('discord.js');
 const fs = require('fs')
-const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'))
+const path = require('node:path');
+const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
 
-for (const file of commandFiles) {
-	const command = require(`./commands/${file}`)
-	client.commands.set(command.name, command)
+// ~~~~~~~~~~~ CODE FOR EVENT HANDLING ~~~~~~~~~~~
+const eventsPath = path.join(__dirname, 'events')
+const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'))
+
+for (const file of eventFiles) {
+	const filePath = path.join(eventsPath, file)
+	const event = require(filePath)
+	if (event.once) {
+		client.once(event.name, (...args) => event.execute(...args));
+	} else {
+		client.on(event.name, (...args) => event.execute(...args));
+	}
 }
 
-client.on('ready', () => {
-  console.log(`Logged in as ${client.user.tag}!`);
-});
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ~~~~~~~~~~~ HANDLER FOR MESSAGE COMMANDS ~~~~~~~~~~~
 
-client.on('interactionCreate', async interaction => {
-	if (!interaction.isCommand()) return;
+client.commands = new Collection()
+const MessageCommandsPath = path.join(__dirname, 'commands/message')
+const messageCommandFiles = fs.readdirSync(MessageCommandsPath).filter(file => file.endsWith('.js'))
 
-	const { commandName } = interaction;
-
-	if (commandName === 'ping') {
-		await interaction.reply('Pong!');
-	} else if (commandName === 'server') {
-		await interaction.reply(`Server name: ${interaction.guild.name}\nTotal members: ${interaction.guild.memberCount}`);
-	} else if (commandName === 'user') {
-		await interaction.reply(`User Info : ${interaction.user.username}`);
-    	await interaction.channel.send(interaction.user.avatarURL())
-	}
-});
+for (const file of messageCommandFiles) {
+	const filePath = path.join(MessageCommandsPath, file)
+	const command = require(filePath)
+	client.commands.set(command.name, command)
+}
 
 client.on('messageCreate', async message => {
 	if (!message.content.startsWith(process.env.PREFIX) || message.author.bot) return;
@@ -45,5 +45,37 @@ client.on('messageCreate', async message => {
 		message.channel.send('There is something wrong :(')
 	}
 })
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+// ~~~~~~~~~~~ HANDLER FOR SLASH COMMANDS ~~~~~~~~~~~
+client.slashCommands = new Collection();
+const slashCommandsPath = path.join(__dirname, 'commands/slash')
+const slashCommandFiles = fs.readdirSync(slashCommandsPath).filter(file => file.endsWith('.js'))
+
+for (const file of slashCommandFiles) {
+	const filePath = path.join(slashCommandsPath, file)
+	const command = require(filePath)
+
+	client.slashCommands.set(command.data.name, command)
+}
+
+client.on('interactionCreate', async interaction => {
+	if (!interaction.isCommand()) return;
+	
+	const command = client.slashCommands.get(interaction.commandName)
+
+	if (!command) return;
+
+	try {
+		await command.execute(interaction)
+	}
+	catch(error) {
+		console.log(error)
+		await interaction.reply({content : 'There was an error while executing this command!', ephemeral: true})
+	}
+});
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 client.login(process.env.TOKEN);

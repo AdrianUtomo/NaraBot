@@ -1,4 +1,3 @@
-// const {apexAPIKey} = require('../config.json')
 const { default: axios } = require("axios")
 const { MessageEmbed } = require('discord.js'); 
 
