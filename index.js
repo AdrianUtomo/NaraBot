@@ -61,19 +61,35 @@ for (const file of slashCommandFiles) {
 }
 
 client.on('interactionCreate', async interaction => {
-	if (!interaction.isCommand()) return;
-	
 	const command = client.slashCommands.get(interaction.commandName)
-
-	if (!command) return;
-
-	try {
-		await command.execute(interaction)
+	if (interaction.isCommand()) {
+		
+		if (!command) return;
+	
+		try {
+			await command.execute(interaction)
+		}
+		catch(error) {
+			console.log(error)
+			await interaction.reply({content : 'There was an error while executing this command!', ephemeral: true})
+		}
 	}
-	catch(error) {
-		console.log(error)
-		await interaction.reply({content : 'There was an error while executing this command!', ephemeral: true})
+
+	else if (interaction.isButton()) {
+		try {
+			if (interaction.customId == 'primary') {
+				await interaction.reply('You pressed the primary button!')
+			}
+			else if (interaction.customId == 'success') {
+				await interaction.reply('You pressed the success button!')
+			}
+		}
+		catch(e) {
+			console.log(e)
+			await interaction.reply({content : 'There was an error while executing this command!', ephemeral: true})
+		}
 	}
+	
 });
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
