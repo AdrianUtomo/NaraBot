@@ -89,6 +89,18 @@ client.on('interactionCreate', async interaction => {
 			await interaction.reply({content : 'There was an error while executing this command!', ephemeral: true})
 		}
 	}
+
+	else if (interaction.isSelectMenu()) {
+		try {
+			if (interaction.customId == 'select') {
+				await interaction.reply(interaction.values[0])
+			}
+		}
+		catch(e) {
+			console.log(e)
+			await interaction.reply({content : 'There was an error while executing this command!', ephemeral: true})
+		}
+	}
 	
 });
 
