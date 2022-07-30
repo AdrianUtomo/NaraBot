@@ -22,7 +22,7 @@ for (const file of eventFiles) {
 // ~~~~~~~~~~~ HANDLER FOR MESSAGE COMMANDS ~~~~~~~~~~~
 
 client.commands = new Collection()
-const MessageCommandsPath = path.join(__dirname, 'commands/message')
+const MessageCommandsPath = path.join(__dirname, 'commands')
 const messageCommandFiles = fs.readdirSync(MessageCommandsPath).filter(file => file.endsWith('.js'))
 
 for (const file of messageCommandFiles) {
