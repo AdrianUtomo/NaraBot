@@ -66,7 +66,6 @@ client.on('interactionCreate', async interaction => {
 		if (interaction.isCommand()) {
 			
 			if (!command) return;
-		
 			await command.execute(interaction)
 		}
 	

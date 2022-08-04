@@ -25,10 +25,10 @@ const rest = new REST({ version: '10' }).setToken(process.env.TOKEN);
 			{ body: slashCommands },
 		);
 
-		await rest.put(
-			Routes.applicationCommands(process.env.CLIENT_ID),
-			{ body: slashCommands },
-		);
+		// await rest.put(
+		// 	Routes.applicationCommands(process.env.CLIENT_ID),
+		// 	{ body: slashCommands },
+		// );
 
 		console.log('Successfully reloaded application (/) commands.');
 	} catch (error) {
