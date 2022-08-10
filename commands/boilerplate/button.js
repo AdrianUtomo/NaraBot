@@ -3,8 +3,9 @@ const { MessageActionRow, MessageButton } = require('discord.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('button')
-        .setDescription('Choose a button'),
+    .setName('button')
+    .setDescription('Choose a button'),
+    buttonID : 'button',
     async execute(interaction) {
         const row = new MessageActionRow()
             .addComponents(
@@ -21,5 +22,5 @@ module.exports = {
             )
 
         await interaction.reply({content : 'Choose a Button!', components: [row]})
-    }
+    },
 }
