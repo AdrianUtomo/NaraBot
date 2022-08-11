@@ -15,15 +15,12 @@ client.commands = new Collection();
 	for (file of functions) {
 		require(`./functions/${file}`)(client)
 	}
-	client.dbLogin()
+	// client.dbLogin()
 	client.handleEvents(eventFiles, "../events")
 	client.handleCommands(commandFolders, './commands')
 	
 	client.login(process.env.TOKEN);
 
-	// const dbFile = path.join(__dirname, 'dbLogin.js')
-	// require(dbFile)(client)
-	// client.dbLogin();
 })();
 
 // ~~~~~~~~~~~ CODE FOR MongoDB Login ~~~~~~~~~~~

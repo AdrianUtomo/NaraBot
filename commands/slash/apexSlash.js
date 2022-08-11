@@ -71,7 +71,7 @@ module.exports = {
 			}
 		}
 
-        else if (interaction.options.getSubcommand() === 'crafting') {
+        else if (subcommand === 'crafting') {
 			try {
 				const getCrafting = async() => {
 					const craftingRotation = await axios.get(`https://api.mozambiquehe.re/crafting?auth=${process.env.APEX_API_KEY}`)
