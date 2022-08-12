@@ -1,4 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
+const {MessageEmbed} = require('discord.js')
 const { default: axios } = require("axios")
 
 module.exports = {
@@ -21,7 +22,11 @@ module.exports = {
     .addSubcommand(subcommand => 
         subcommand
             .setName('crafting')
-            .setDescription("Info about crafting rotation")),
+            .setDescription("Info about crafting rotation"))
+	.addSubcommand(subcommand => 
+		subcommand
+			.setName('news')
+			.setDescription("Latest Apex Legends News")),
 	async execute(interaction) {
         const subcommand = interaction.options.getSubcommand()
         // console.log(interaction.options.getSubcommand())
@@ -111,9 +116,37 @@ module.exports = {
 				getCrafting()
 			}
 			catch(e) {
-				await interaction.reply("Error, something is wrong :(")
+				await interaction.reply("Error, something was wrong :(")
 			}
         }
+
+		else if (subcommand === 'news') {
+			try {
+				const getNews = async () => {
+					const apexNews = await axios.get(`https://api.mozambiquehe.re/news?auth=${process.env.APEX_API_KEY}`)
+					const data = apexNews.data
+					const newsTitle = []
+					for (let i = 0; i < 5; i++) {
+						newsTitle.push(data[i].title)
+					}
+					const newsTitleEmbed = new MessageEmbed()
+					.setColor('#1ce7db')
+					.setTitle("5 Latest Apex Legends News from the API")
+					.setDescription(
+						newsTitle.map((i) => {
+							return `${newsTitle.indexOf(i)+1}. ${i}`
+						}).join("\n")
+					)
+						
+					await interaction.reply({embeds : [newsTitleEmbed]})
+				}
+				getNews()
+			}
+			catch(e) {
+				console.log(e)
+				await interaction.reply("Error, something was wrong :(")
+			}
+		}
 	}
 
 }
