@@ -137,8 +137,25 @@ module.exports = {
 							return `${newsTitle.indexOf(i)+1}. ${i}`
 						}).join("\n")
 					)
-						
+					const filter = (i) => i.member.id === interaction.member.id && i.content <= 5 && i.content > 0
+
 					await interaction.reply({embeds : [newsTitleEmbed]})
+						.then(() => {
+							interaction.channel.awaitMessages({filter, max: 1, time: 10000, errors: ['time']})
+								.then(collected => {
+									const news = data[collected.first()]
+									const showNews = new MessageEmbed()
+										.setColor('#1ce7db')
+										.setTitle(news.title)
+										.setDescription(news.short_desc)
+										.setURL(news.link)
+										.setImage(news.img)
+									interaction.followUp({embeds : [showNews]})
+								})
+								.catch(() => {
+									interaction.followUp("You didn't input anything")
+								})
+						})
 				}
 				getNews()
 			}
