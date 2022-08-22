@@ -1,5 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const {MessageEmbed} = require('discord.js')
+const { EmbedBuilder , SlashCommandBuilder } = require('discord.js')
 const { default: axios } = require("axios")
 
 module.exports = {
@@ -29,8 +28,7 @@ module.exports = {
 			.setDescription("Latest Apex Legends News")),
 	async execute(interaction) {
         const subcommand = interaction.options.getSubcommand()
-        // console.log(interaction.options.getSubcommand())
-        // console.log(interaction.options.get('category').value)
+		
 		if (subcommand === 'map') {
 			const mapRotationEmbed = {
 				color: 0x0099ff,
@@ -129,7 +127,7 @@ module.exports = {
 					for (let i = 0; i < 5; i++) {
 						newsTitle.push(data[i].title)
 					}
-					const newsTitleEmbed = new MessageEmbed()
+					const newsTitleEmbed = new EmbedBuilder()
 					.setColor('#1ce7db')
 					.setTitle("5 Latest Apex Legends News from the API")
 					.setDescription(
@@ -140,20 +138,22 @@ module.exports = {
 					const filter = (i) => i.member.id === interaction.member.id && i.content <= 5 && i.content > 0
 
 					await interaction.reply({embeds : [newsTitleEmbed]})
-						.then(() => {
-							interaction.channel.awaitMessages({filter, max: 1, time: 10000, errors: ['time']})
-								.then(collected => {
+						.then(async () => {
+							await interaction.channel.awaitMessages({filter, max: 1, time: 10000, errors: ['time']})
+								.then(async collected => {
+									console.log(collected)
 									const news = data[collected.first()]
-									const showNews = new MessageEmbed()
+									const showNews = new EmbedBuilder()
 										.setColor('#1ce7db')
 										.setTitle(news.title)
 										.setDescription(news.short_desc)
 										.setURL(news.link)
 										.setImage(news.img)
-									interaction.followUp({embeds : [showNews]})
+									await interaction.followUp({embeds : [showNews]})
 								})
-								.catch(() => {
-									interaction.followUp("You didn't input anything")
+								.catch(async (collected) => {
+									console.log(collected)
+									await interaction.followUp("You didn't input anything")
 								})
 						})
 				}

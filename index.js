@@ -1,8 +1,8 @@
 require('dotenv').config();
-const { Client, Intents, Collection } = require('discord.js');
+const { Client, GatewayIntentBits , Collection } = require('discord.js');
 const fs = require('fs')
 const path = require('node:path');
-const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
+const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
 
 const functions = fs.readdirSync("./functions").filter(file => file.endsWith('.js'));
 const eventFiles = fs.readdirSync("./events").filter(file => file.endsWith('.js'));

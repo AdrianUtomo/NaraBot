@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 module.exports = (client) => {
     client.dbLogin = async () => {
-        await mongoose.connect('mongodb://localhost:27017/economyNara')
+        await mongoose.connect('mongodb://localhost:27017/naraBot')
             .then(() => {
                 console.log('CONNECTION OPEN!')
             })
