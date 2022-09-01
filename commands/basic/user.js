@@ -15,6 +15,7 @@ module.exports = {
             .setColor(0x0099FF)
             .setImage(user.displayAvatarURL())
             .setTitle("USER INFO!")
+            .setThumbnail(user.displayAvatarURL)
             .addFields(
                 {name: "Member Name:", value: user.username},
                 {name: "Tag:", value: user.tag},
