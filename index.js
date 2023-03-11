@@ -15,7 +15,7 @@ client.commands = new Collection();
 	for (file of functions) {
 		require(`./functions/${file}`)(client)
 	}
-	client.dbLogin()
+	// client.dbLogin()
 	client.handleEvents(eventFiles, "../events")
 	client.handleCommands(commandFolders, './commands')
 	
