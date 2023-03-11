@@ -23,8 +23,6 @@ module.exports = {
             }
         })
         const content = shoot.data.choices[0].message.content
-        console.log(content)
-        console.log(interaction.user)
-        await interaction.editReply({content: `${userInput}${content}`})
+        await interaction.editReply({content: `**Question : ${userInput}\nAsked By : ${interaction.user}**${content}`})
     }
 }
