@@ -7,7 +7,7 @@ const fs = require('fs')
 const slashCommands = [];
 const slashCommandsTest = [];
 const commandsPath = path.join(__dirname, 'commands')
-const commandFolders = fs.readdirSync(commandsPath).filter(folder => folder !== 'boilerplate' && folder !== 'message')
+const commandFolders = fs.readdirSync(commandsPath).filter(folder => folder !== 'boilerplate' && folder !== 'message' && folder !== 'openai')
 const commandFoldersTest = fs.readdirSync(commandsPath).filter(folder => folder !== 'message')
 
 for (const folder of commandFoldersTest) {
